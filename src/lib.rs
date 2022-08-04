@@ -1,3 +1,4 @@
+mod sort;
 #[cfg(test)]
 mod tests {
     #[test]
