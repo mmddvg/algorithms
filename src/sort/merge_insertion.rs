@@ -1,13 +1,16 @@
+use crate::sort::insertion_sort;
 
-pub fn merge_sort(mut arg: &[i32]) -> Vec<i32> {
+pub fn merge_insertion(arg: &mut [i32]) -> Vec<i32> {
     let len = arg.len();
-    let mut res = Vec::new();
-    if len == 1 {
-        res.push(arg[0]);
-        return res;
+    if len <= 5 {
+        insertion_sort(arg);
+        return arg.to_vec();
     }
     let middle = if len % 2 == 0 { len / 2 } else { (len + 1) / 2 };
-    let (first, second) = (merge_sort(&arg[..middle]), merge_sort(&arg[middle..]));
+    let (first, second) = (
+        merge_insertion(&mut arg[..middle]),
+        merge_insertion(&mut arg[middle..]),
+    );
 
     return sort(&first, &second);
 }
@@ -16,7 +19,7 @@ fn sort(a: &[i32], b: &[i32]) -> Vec<i32> {
     let (a_len, b_len) = (a.len(), b.len());
     let mut res: Vec<i32> = Vec::with_capacity(a_len + b_len);
     let (mut i, mut j) = (0, 0);
-    for _ in 0..res.capacity() {
+    for z in 0..res.capacity() {
         if i == a_len {
             res.extend_from_slice(&b[j..]);
             return res;
@@ -37,8 +40,8 @@ fn sort(a: &[i32], b: &[i32]) -> Vec<i32> {
 }
 #[test]
 fn merge_test() {
-    let a = vec![42, 124, 532, 12, 93];
-    let b = merge_sort(&a[..]);
+    let mut a = vec![42, 124, 532, 12, 93];
+    let mut b = merge_insertion(&mut a[..]);
     assert_eq!(vec![12, 42, 93, 124, 532], b);
 }
 
